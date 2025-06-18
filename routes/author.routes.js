@@ -27,4 +27,16 @@ router.post("/authors", (req, res, next) => {
     });
 });
 
+router.get("/authors", (req, res, next) => {
+  prisma.author
+    .findMany({ include: { books: true } }) // Include books related to the author
+    .then((allAuthors) => {
+      res.json(allAuthors);
+    })
+    .catch((err) => {
+      console.log("Error getting authors from DB", err);
+      res.status(500).json({ message: "Error getting authors from DB" });
+    });
+});
+
 module.exports = router;
